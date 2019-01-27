@@ -1,6 +1,8 @@
 <template>
     <div id='app'>
-        <router-view />
+        <transition name='router' mode='out-in'>
+            <router-view />
+        </transition>
     </div>
 </template>
 
@@ -31,5 +33,15 @@ body {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+}
+
+.router-enter-active, .router-leave-active {
+    transition-duration: 0.3s;
+    transition-property: opacity;
+    transition-timing-function: ease;
+}
+
+.router-enter, .router-leave-active {
+    opacity: 0;
 }
 </style>
