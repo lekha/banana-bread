@@ -19,28 +19,20 @@ export default {
     name: 'SelectFoods',
     data() {
         return {
-            foods: [
-                {
-                    'owner': 'Lekha',
-                    'image_url': 'https://www.simplyrecipes.com/wp-content/uploads/2014/08/banana-bread-vertical-c-1200.jpg',
-                    'selected': false
-                },
-                {
-                    'owner': 'Mike K',
-                    'image_url': 'https://images-gmi-pmc.edge-generalmills.com/c23f59e1-1a55-4ba7-91de-71ca24e197fe.jpg',
-                    'selected': false
-                },
-                {
-                    'owner': 'Danielle',
-                    'image_url': 'https://www.landolakes.com/RecipeManagementSystem/media/Recipe-Media-Files/Recipes/Retail/x17/20643-walnut-banana-bread-600x600.jpg?ext=.jpg',
-                    'selected': false
-                }
-            ]
+            foods: []
         }
+    },
+    created() {
+        this.loadFoods();
     },
     methods: {
         selectFood(index) {
             this.foods[index].selected = !this.foods[index].selected;
+        },
+        loadFoods() {
+            this.$http.get('api/foods').then((response) => {
+                this.foods = response.data;
+            })
         }
     }
 }
