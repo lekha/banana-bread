@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import SelectRole from '@/components/SelectRole.vue';
+import SelectFoods from '@/components/SelectFoods.vue';
 
 Vue.use(Router);
 
@@ -10,6 +11,11 @@ export default new Router({
             path: '/',
             name: 'SelectRole',
             component: SelectRole
+        },
+        {
+            path: '/foods',
+            name: 'SelectFoods',
+            component: SelectFoods
         }
     ]
 });

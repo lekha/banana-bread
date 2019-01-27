@@ -9,6 +9,8 @@
 
 html {
     height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -19,5 +21,15 @@ body {
     justify-items: center;
     align-items: center;
     height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#app {
+    width: 100%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 </style>
