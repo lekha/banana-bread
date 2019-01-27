@@ -15,9 +15,11 @@ export default {
     name: 'SelectRole',
     methods: {
         redirectToFood() {
+            this.$http.post('api/selected_role', {role: 'judge'});
             this.$router.push('foods');
         },
         redirectToPhotos() {
+            this.$http.post('api/selected_role', {role: 'chef'});
         }
     }
 }

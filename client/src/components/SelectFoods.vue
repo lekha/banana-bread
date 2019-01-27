@@ -30,6 +30,7 @@ export default {
     methods: {
         selectFood(index) {
             this.foods[index].selected = !this.foods[index].selected;
+            this.$http.post('api/selected_food', {foods: this.foods});
         },
         loadFoods() {
             this.$http.get('api/foods').then((response) => {

@@ -1,8 +1,10 @@
 """Back-end server."""
+import json
 import random
 
 from flask import Flask
 from flask import jsonify
+from flask import request
 
 
 app = Flask(__name__)
@@ -33,9 +35,19 @@ SUPERLATIVES = ['prettier', 'tastier', 'better textured']
 def index():
     return 'Hello World'
 
+@app.route('/api/selected_role', methods=['POST'])
+def api_selected_role():
+    role = json.loads(request.data)['role']
+    return ''
+
 @app.route('/api/foods')
 def api_foods():
     return jsonify(FOODS)
+
+@app.route('/api/selected_food', methods=['POST'])
+def api_selected_food():
+    foods = json.loads(request.data)['foods']
+    return ''
 
 @app.route('/api/vote')
 def api_vote():
@@ -46,6 +58,11 @@ def api_vote():
         'food2': food2,
     }
     return jsonify(vote)
+
+@app.route('/api/vote_result', methods=['POST'])
+def api_vote_result():
+    results = json.loads(request.data)
+    return ''
 
 
 if __name__ == '__main__':

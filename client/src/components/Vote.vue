@@ -32,13 +32,18 @@ export default {
     methods: {
         getNext() {
             this.$http.get('api/vote').then((response) => {
-                console.log(response.data);
                 this.superlative = response.data.superlative;
                 this.food1 = response.data.food1;
                 this.food2 = response.data.food2;
             });
         },
         record(winner) {
+            this.$http.post('api/vote_result', {
+                superlative: this.superlative,
+                food1: this.food1,
+                food2: this.food2,
+                winner: winner
+            })
             this.getNext();
         }
     }
