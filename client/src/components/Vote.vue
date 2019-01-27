@@ -3,9 +3,9 @@
         <h1>Which one was <u>{{ superlative }}</u>?</h1>
         <div class='grid'>
             <p></p>
-            <img class='icon' v-bind:src='food1.imageUrl'>
+            <img class='icon' v-bind:src='food1.image_url'>
             <p class='icon-text'>vs.</p>
-            <img class='icon' v-bind:src='food2.imageUrl'>
+            <img class='icon' v-bind:src='food2.image_url'>
             <p></p>
             <p></p>
             <p>{{ food1.owner }}'s</p>
@@ -21,15 +21,22 @@ export default {
     name: 'Vote',
     data() {
         return {
-            superlative: 'prettier',
-            food1: {
-                owner: 'Lekha',
-                imageUrl: 'https://www.simplyrecipes.com/wp-content/uploads/2014/08/banana-bread-vertical-c-1200.jpg'
-            },
-            food2: {
-                owner: 'Mike K',
-                imageUrl: 'https://images-gmi-pmc.edge-generalmills.com/c23f59e1-1a55-4ba7-91de-71ca24e197fe.jpg' 
-            }
+            superlative: '',
+            food1: {},
+            food2: {},
+        }
+    },
+    created() {
+        this.getNext();
+    },
+    methods: {
+        getNext() {
+            this.$http.get('api/vote').then((response) => {
+                console.log(response.data);
+                this.superlative = response.data.superlative;
+                this.food1 = response.data.food1;
+                this.food2 = response.data.food2;
+            });
         }
     }
 }
