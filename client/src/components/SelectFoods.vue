@@ -10,11 +10,13 @@
                 <p>{{ food.owner }}'s</p>
             </div>
         </div>
-        <button>Start Judging</button>
+        <button v-on:click='redirectToVote()'>Start Judging</button>
     </div>
 </template>
 
 <script>
+
+
 export default {
     name: 'SelectFoods',
     data() {
@@ -33,6 +35,9 @@ export default {
             this.$http.get('api/foods').then((response) => {
                 this.foods = response.data;
             })
+        },
+        redirectToVote() {
+            this.$router.push('vote');
         }
     }
 }

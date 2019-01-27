@@ -3,9 +3,9 @@
         <h1>Which one was <u>{{ superlative }}</u>?</h1>
         <div class='grid'>
             <p></p>
-            <img class='icon' v-bind:src='food1.image_url'>
+            <img class='icon' v-bind:src='food1.image_url' v-on:click='record("food1")'>
             <p class='icon-text'>vs.</p>
-            <img class='icon' v-bind:src='food2.image_url'>
+            <img class='icon' v-bind:src='food2.image_url' v-on:click='record("food2")'>
             <p></p>
             <p></p>
             <p>{{ food1.owner }}'s</p>
@@ -37,6 +37,9 @@ export default {
                 this.food1 = response.data.food1;
                 this.food2 = response.data.food2;
             });
+        },
+        record(winner) {
+            this.getNext();
         }
     }
 }

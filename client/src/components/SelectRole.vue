@@ -1,10 +1,27 @@
 <template>
     <div class='main'>
-        <div class='icon'><i class='fas fa-gavel fa-10x'></i></div>
+        <div class='icon' v-on:click='redirectToFood()'>
+            <i class='fas fa-gavel fa-10x'></i>
+        </div>
         <p class='icon-text'>OR</p>
-        <div class='icon'><i class='fas fa-cookie-bite fa-10x'></i></div>
+        <div class='icon' v-on:click='redirectToPhotos()'>
+            <i class='fas fa-cookie-bite fa-10x'></i>
+        </div>
     </div>
 </template>
+
+<script>
+export default {
+    name: 'SelectRole',
+    methods: {
+        redirectToFood() {
+            this.$router.push('foods');
+        },
+        redirectToPhotos() {
+        }
+    }
+}
+</script>
 
 <style scoped>
 @import 'https://use.fontawesome.com/releases/v5.6.3/css/all.css';
