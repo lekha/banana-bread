@@ -1,11 +1,21 @@
 <template>
     <div class='main'>
-        This is the page where the user selects either the chef or judge role.
-        <i class='fas fa-gavel'></i>
-        <i class='fas fa-cookie-bite'></i>
+        <div class='icon'><i class='fas fa-gavel fa-10x'></i></div>
+        OR
+        <div class='icon'><i class='fas fa-cookie-bite fa-10x'></i></div>
     </div>
 </template>
 
-<style>
-@import 'https://use.fontawesome.com/releases/v5.6.3/css/all.css'
+<style scoped>
+@import 'https://use.fontawesome.com/releases/v5.6.3/css/all.css';
+
+.icon {
+    padding: 10px;
+    margin: 5px;
+    border: solid 15px;
+    border-radius: 10px;
+    width: 10em;
+    display: inline-block;
+}
+
 </style>
