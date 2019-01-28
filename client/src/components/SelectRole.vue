@@ -20,6 +20,7 @@ export default {
         },
         redirectToPhotos() {
             this.$http.post('api/selected_role', {role: 'chef'});
+            this.$router.push('upload');
         }
     }
 }

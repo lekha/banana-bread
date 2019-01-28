@@ -1,5 +1,6 @@
 """Back-end server."""
 import json
+import os.path
 import random
 from collections import defaultdict
 from itertools import combinations
@@ -13,12 +14,14 @@ from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import LoginManager
+from werkzeug.utils import secure_filename
 
 from server.auth import Config
 from server.auth import auth_url_and_state
 from server.auth import dict_to_user
 from server.auth import user_data_from_state
 from server.auth import user_data_to_user
+from server.database import fetch_baker_photo
 from server.database import fetch_categories
 from server.database import fetch_foods
 from server.database import fetch_selected_foods
@@ -27,6 +30,7 @@ from server.database import fetch_user_by_id
 from server.database import fetch_voted_foods
 from server.database import fetch_votes
 from server.database import fetch_winnings
+from server.database import set_baker
 from server.database import set_selected_foods
 from server.database import set_user
 from server.database import set_votes
@@ -170,6 +174,27 @@ def api_rankings():
         scores_by_category[match['category']][match['loser']] -= 1
 
     return jsonify(scores_by_category)
+
+@app.route('/api/upload', methods=['POST'])
+@login_required
+def api_upload():
+    file = request.files['file']
+    if file and file.filename:
+        filename = '%s.%s' % (current_user.id, file.filename.split('.')[-1])
+        filename = secure_filename(filename)
+        file_path = os.path.join('/media', filename)
+        file.save(file_path)
+
+        baker_name = current_user.name.split(' ')[0]
+        set_baker(current_user, baker_name, file_path) 
+        return jsonify({'image_url': file_path})
+
+@app.route('/api/photo')
+@login_required
+def api_photo():
+    baker_name = current_user.name.split(' ')[0]
+    image_url = fetch_baker_photo(current_user)
+    return jsonify({'image_url': image_url})
 
 
 if __name__ == '__main__':

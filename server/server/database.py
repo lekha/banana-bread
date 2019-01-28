@@ -192,3 +192,80 @@ def fetch_winnings():
     winnings = cursor.fetchall()
     conn.close()
     return winnings
+
+def fetch_baker(user):
+    query = '''
+        SELECT baker.id, baker.name
+          FROM cafe.foods food
+     LEFT JOIN cafe.bakers baker
+            ON food.baker_id = baker.id
+         WHERE image_url LIKE %(image_url)s
+    '''
+    params = {'image_url': '%/{}.%'.format(user.id)}
+
+    conn = connection()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute(query, params)
+    results = cursor.fetchall()
+    conn.close()
+
+    if results:
+        baker = results[0]
+    else:
+        baker = None
+    return baker
+
+def set_baker(user, baker_name, food_image_url):
+    maybe_baker = fetch_baker(user)
+    query_1 = '''
+        INSERT IGNORE cafe.bakers (name)
+               VALUES (%(baker_name)s)
+    '''
+    params_1 = {'baker_name': baker_name}
+
+    query_2 = '''
+        SELECT MAX(id)
+          FROM cafe.bakers
+    '''
+    
+    query_3 = '''
+        INSERT IGNORE cafe.foods (baker_id, image_url)
+               VALUES (%(baker_id)s, %(image_url)s)
+    '''
+
+    conn = connection()
+    cursor = conn.cursor()
+    if not maybe_baker:
+        cursor.execute(query_1, params_1)
+        conn.commit()
+
+        cursor.execute(query_2)
+        baker_id = cursor.fetchall()[0][0]
+    else:
+        baker_id = maybe_baker['id']
+
+    params_3 = {'baker_id': baker_id, 'image_url': food_image_url}
+    cursor.execute(query_3, params_3)
+    conn.commit()
+
+    conn.close()
+
+def fetch_baker_photo(user):
+    query = '''
+        SELECT food.image_url
+          FROM cafe.foods food
+         WHERE image_url LIKE %(image_url)s
+    '''
+    params = {'image_url': '%s.' % user.id}
+
+    conn = connection()
+    cursor = conn.cursor()
+    cursor.execute(query, params)
+    results = cursor.fetchall()
+    conn.close()
+
+    if results:
+        image_url = results[0]
+    else:
+        image_url = None
+    return image_url
