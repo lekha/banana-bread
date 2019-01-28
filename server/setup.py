@@ -14,6 +14,8 @@ LONG_DESCRIPTION = DESCRIPTION
 SETUP_DEPS = ()
 INSTALL_DEPS = (
     'Flask',
+    'flask-login',
+    'requests-oauthlib',
 )
 EXTRA_DEPS = {}
 TEST_DEPS = ()
