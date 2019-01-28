@@ -1,6 +1,6 @@
 <template>
     <div class='main'>
-        <h1>Which one was <u>{{ superlative }}</u>?</h1>
+        <h1>Which one was <u>{{ category.superlative }}</u>?</h1>
         <div class='grid'>
             <p></p>
             <img class='icon' v-bind:src='food1.image_url' v-on:click='record("food1")'>
@@ -21,7 +21,7 @@ export default {
     name: 'Vote',
     data() {
         return {
-            superlative: '',
+            category: {superlative: ''},
             food1: {},
             food2: {},
         }
@@ -32,14 +32,14 @@ export default {
     methods: {
         getNext() {
             this.$http.get('api/vote').then((response) => {
-                this.superlative = response.data.superlative;
+                this.category = response.data.category;
                 this.food1 = response.data.food1;
                 this.food2 = response.data.food2;
             });
         },
         record(winner) {
             this.$http.post('api/vote_result', {
-                superlative: this.superlative,
+                category: this.category,
                 food1: this.food1,
                 food2: this.food2,
                 winner: winner

@@ -59,7 +59,8 @@ def fetch_foods():
     conn = connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     query = '''
-        SELECT food.id, baker.name as owner, food.image_url
+        SELECT food.id, baker.name as owner, baker.id as owner_id,
+               food.image_url
           FROM cafe.foods food
      LEFT JOIN cafe.bakers baker
             ON food.baker_id = baker.id
@@ -104,14 +105,46 @@ def set_selected_foods(user_id, foods):
     conn.commit()
     conn.close()
 
-def fetch_superlatives():
+def fetch_categories():
     conn = connection()
-    cursor = conn.cursor()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     query = '''
-        SELECT superlative
+        SELECT id, name, superlative
           FROM cafe.categories
     '''
     cursor.execute(query)
-    superlatives = [x for (x,) in cursor.fetchall()]
+    categories = list(cursor.fetchall())
     conn.close()
-    return superlatives
+    return categories
+
+def fetch_votes(user):
+    query = '''
+        SELECT category_id, winner_baker_id, loser_baker_id
+          FROM cafe.votes
+         WHERE user_id = %(user_id)s
+    '''
+    params = {'user_id': user.id}
+    conn = connection()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute(query, params)
+    votes = list(cursor.fetchall())
+    conn.close()
+    return votes
+
+def set_votes(user, category, winner, loser):
+    query = '''
+        INSERT INTO cafe.votes (user_id, category_id, winner_baker_id,
+                    loser_baker_id)
+             VALUES (%(user_id)s, %(category_id)s, %(winner_id)s, %(loser_id)s)
+    '''
+    params = {
+        'user_id': user.id,
+        'category_id': category['id'],
+        'winner_id': winner['owner_id'],
+        'loser_id': loser['owner_id'],
+    }
+    conn = connection()
+    cursor = conn.cursor()
+    cursor.execute(query, params)
+    conn.commit()
+    conn.close()
