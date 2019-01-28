@@ -17,6 +17,7 @@ from server.auth import auth_url_and_state
 from server.auth import load_user_from_id
 from server.auth import load_user_from_state
 from server.database import fetch_foods
+from server.database import fetch_superlatives
 
 
 app = Flask(__name__)
@@ -24,9 +25,6 @@ app.config.from_object(Config)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.session_protection = 'strong'
-
-
-SUPERLATIVES = ['prettier', 'tastier', 'better textured']
 
 
 @login_manager.user_loader
@@ -86,7 +84,7 @@ def api_selected_food():
 def api_vote():
     food1, food2 = random.sample(fetch_foods(), 2)
     vote =  {
-        'superlative': random.choice(SUPERLATIVES),
+        'superlative': random.choice(fetch_superlatives()),
         'food1': food1,
         'food2': food2,
     }

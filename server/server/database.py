@@ -19,3 +19,15 @@ def fetch_foods():
     foods = list(cursor.fetchall())
     conn.close()
     return foods
+
+def fetch_superlatives():
+    conn = connection()
+    cursor = conn.cursor()
+    query = '''
+        SELECT superlative
+          FROM cafe.categories
+    '''
+    cursor.execute(query)
+    superlatives = [x for (x,) in cursor.fetchall()]
+    conn.close()
+    return superlatives
