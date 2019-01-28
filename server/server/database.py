@@ -70,7 +70,32 @@ def fetch_foods():
     conn.close()
     return foods
 
-def fetch_selected_foods(user_id):
+def fetch_voted_foods(user):
+    query_1 = '''
+        SELECT food.id
+          FROM cafe.votes vote
+     LEFT JOIN cafe.foods food
+            ON vote.winner_baker_id = food.baker_id
+         WHERE vote.user_id = %(user_id)s
+    '''
+    query_2 = '''
+        SELECT food.id
+          FROM cafe.votes vote
+     LEFT JOIN cafe.foods food
+            ON vote.loser_baker_id = food.baker_id
+         WHERE vote.user_id = %(user_id)s
+    '''
+    params = {'user_id': user.id}
+    conn = connection()
+    cursor = conn.cursor()
+    cursor.execute(query_1, params)
+    voted_foods_1 = {x for (x,) in cursor.fetchall()}
+    cursor.execute(query_2, params)
+    voted_foods_2 = {x for (x,) in cursor.fetchall()}
+    conn.close()
+    return voted_foods_1.union(voted_foods_2)
+
+def fetch_selected_foods(user):
     conn = connection()
     cursor = conn.cursor()
     query = '''
@@ -79,9 +104,9 @@ def fetch_selected_foods(user_id):
          WHERE is_selected = 1
            AND user_id = %(user_id)s
     '''
-    params = {'user_id': user_id}
+    params = {'user_id': user.id}
     cursor.execute(query, params)
-    selected_foods = [x for (x,) in cursor.fetchall()]
+    selected_foods = {x for (x,) in cursor.fetchall()}
     conn.close()
     return selected_foods
 

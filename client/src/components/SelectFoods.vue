@@ -32,6 +32,9 @@ export default {
     },
     methods: {
         selectFood(index) {
+            if (this.foods[index].selected && !this.foods[index].can_unselect) {
+                return;
+            }
             this.foods[index].selected = !this.foods[index].selected;
             if (this.foods[index].selected) {
                 this.selected++;

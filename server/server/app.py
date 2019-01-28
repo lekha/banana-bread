@@ -23,6 +23,7 @@ from server.database import fetch_foods
 from server.database import fetch_selected_foods
 from server.database import fetch_user
 from server.database import fetch_user_by_id
+from server.database import fetch_voted_foods
 from server.database import fetch_votes
 from server.database import set_selected_foods
 from server.database import set_user
@@ -85,12 +86,18 @@ def api_selected_role():
 @login_required
 def api_foods():
     foods = fetch_foods()
-    selected_foods = fetch_selected_foods(current_user.id)
+    selected_foods = fetch_selected_foods(current_user)
+    voted_foods = fetch_voted_foods(current_user)
     for food in foods:
         if food['id'] in selected_foods:
             food['selected'] = True
         else:
             food['selected'] = False
+
+        if food['id'] in voted_foods:
+            food['can_unselect'] = False
+        else:
+            food['can_unselect'] = True
     return jsonify(foods)
 
 @app.route('/api/selected_food', methods=['POST'])
@@ -104,7 +111,7 @@ def api_selected_food():
 @login_required
 def api_vote():
     all_foods = fetch_foods()
-    selected = fetch_selected_foods(current_user.id)
+    selected = fetch_selected_foods(current_user)
     filtered = [food for food in all_foods if food['id'] in selected]
 
     categories = fetch_categories()
