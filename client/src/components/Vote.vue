@@ -84,26 +84,6 @@ p {
     justify-items: center;
 }
 
-#left-image {
-    grid-area: left-image;
-}
-
-#middle {
-    grid-area: middle;
-}
-
-#right-image {
-    grid-area: right-image;
-}
-
-#left-text {
-    grid-area: left-text;
-}
-
-#right-text {
-    grid-area: right-text;
-}
-
 .icon {
     display: block;
     margin: 50px;
