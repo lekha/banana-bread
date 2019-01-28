@@ -10,7 +10,9 @@
                 <p>{{ food.owner }}'s</p>
             </div>
         </div>
-        <button v-on:click='redirectToVote()'>Start Judging</button>
+        <button v-on:click='redirectToVote()' :disabled='selected<2'>
+            Start Judging
+        </button>
     </div>
 </template>
 
@@ -21,7 +23,8 @@ export default {
     name: 'SelectFoods',
     data() {
         return {
-            foods: []
+            foods: [],
+            selected: 0
         }
     },
     created() {
@@ -30,12 +33,26 @@ export default {
     methods: {
         selectFood(index) {
             this.foods[index].selected = !this.foods[index].selected;
+            if (this.foods[index].selected) {
+                this.selected++;
+            } else {
+                this.selected--;
+            }
             this.$http.post('api/selected_food', {foods: this.foods});
         },
         loadFoods() {
             this.$http.get('api/foods').then((response) => {
                 this.foods = response.data;
+                this.updateCount();
             })
+        },
+        updateCount() {
+            this.selected = 0;
+            for (var i=0; i<this.foods.length; i++) {
+                if (this.foods[i].selected) {
+                    this.selected++;
+                }
+            }
         },
         redirectToVote() {
             this.$router.push('vote');
@@ -99,5 +116,10 @@ h1 {
 
 .fade-enter, .fade-leave-to {
     opacity: 0;
+}
+
+button {
+    padding: 7px;
+    font-size: 25px;
 }
 </style>

@@ -98,8 +98,12 @@ def api_selected_food():
     return ''
 
 @app.route('/api/vote')
+@login_required
 def api_vote():
-    food1, food2 = random.sample(fetch_foods(), 2)
+    all_foods = fetch_foods()
+    selected = fetch_selected_foods(current_user.id)
+    filtered = [food for food in all_foods if food['id'] in selected]
+    food1, food2 = random.sample(filtered, 2)
     vote =  {
         'superlative': random.choice(fetch_superlatives()),
         'food1': food1,
