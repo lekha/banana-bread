@@ -59,8 +59,7 @@ def index():
 @app.route('/login')
 def login():
     if current_user.is_authenticated:
-        request.args.get('next')
-        return redirect(next or '/')
+        return redirect(request.args.get('next') or '/')
 
     auth_url, state = auth_url_and_state()
     session['oauth_state'] = state
