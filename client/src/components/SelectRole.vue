@@ -16,7 +16,7 @@ export default {
     methods: {
         redirectToFood() {
             this.$http.post('api/selected_role', {role: 'judge'});
-            this.$router.push('foods');
+            this.$router.push('select');
         },
         redirectToPhotos() {
             this.$http.post('api/selected_role', {role: 'chef'});

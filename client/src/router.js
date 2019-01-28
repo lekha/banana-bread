@@ -15,7 +15,7 @@ export default new Router({
             component: SelectRole
         },
         {
-            path: '/foods',
+            path: '/select',
             name: 'SelectFoods',
             component: SelectFoods
         },
