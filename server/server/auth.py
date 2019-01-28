@@ -32,7 +32,8 @@ DB_AUTH = {
 class User(object):
     def __init__(
             self, id=None, name=None, email=None, avatar=None, tokens=None):
-        self.id = id
+        self.id = None
+        self.user_id = id
         self.name = name
         self.email = email
         self.avatar = avatar
@@ -45,10 +46,26 @@ class User(object):
     def get_id(self):
         return self.id
 
+    def db_dict(self):
+        return {
+            'user_id': self.user_id,
+            'name': self.name,
+            'email': self.email,
+            'avatar': self.avatar,
+            'tokens': self.tokens,
+        }
 
-USERS = {
-    -1: User(),
-}
+
+def dict_to_user(user_dict):
+    if user_dict is None:
+        return
+
+    copied_dict = user_dict.copy()
+    del copied_dict['user_id']
+    copied_dict['id'] = user_dict['user_id']
+    user = User(**copied_dict)
+    user.id = user_dict['id']
+    return user
 
 
 def google_auth(state=None, token=None):
@@ -74,7 +91,7 @@ def auth_url_and_state():
         Auth.AUTH_URI, access_type='offline')
     return auth_url, state
 
-def load_user_from_state(state, url):
+def user_data_from_state(state, url):
     auth_with_state = google_auth(state=state)
     token = auth_with_state.fetch_token(
         Auth.TOKEN_URI,
@@ -85,23 +102,18 @@ def load_user_from_state(state, url):
     response = auth_with_token.get(Auth.USER_INFO)
     if response.status_code == 200:
         user_data = response.json()
-        email = user_data['email']
-        user = load_user_from_email(email)
-        if user is None:
-            id = user_data['id']
-            new_user = User(
-                id,
-                user_data['name'],
-                email,
-                user_data['picture'],
-                json.dumps(token),
-            )
-            USERS[id] = new_user
-            user = new_user
-        return user 
+        user_data['token'] = token
+        return user_data
 
-def load_user_from_id(user_id):
-    return USERS.get(user_id)
+def user_data_to_user(user_data):
+    user = User(
+        user_data['id'],
+        user_data['name'],
+        user_data['email'],
+        user_data['picture'],
+        json.dumps(user_data['token']),
+    )
+    return user
 
 def load_user_from_email(email):
     for user in USERS.values():

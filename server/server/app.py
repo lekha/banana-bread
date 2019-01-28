@@ -14,10 +14,16 @@ from flask_login import LoginManager
 
 from server.auth import Config
 from server.auth import auth_url_and_state
-from server.auth import load_user_from_id
-from server.auth import load_user_from_state
+from server.auth import dict_to_user
+from server.auth import user_data_from_state
+from server.auth import user_data_to_user
 from server.database import fetch_foods
+from server.database import fetch_selected_foods
 from server.database import fetch_superlatives
+from server.database import fetch_user
+from server.database import fetch_user_by_id
+from server.database import set_selected_foods
+from server.database import set_user
 
 
 app = Flask(__name__)
@@ -29,7 +35,7 @@ login_manager.session_protection = 'strong'
 
 @login_manager.user_loader
 def load_user(user_id):
-    return load_user_from_id(user_id)
+    return dict_to_user(fetch_user_by_id(user_id))
 
 
 @app.route('/')
@@ -58,7 +64,11 @@ def callback():
     elif 'code' not in request.args and 'state' not in request.args:
         return(redirect('/login'))
     else:
-        user = load_user_from_state(session['oauth_state'], request.url)
+        user_data = user_data_from_state(session['oauth_state'], request.url)
+        user = dict_to_user(fetch_user(user_data['id']))
+        if user is None:
+            user = user_data_to_user(user_data)
+            user.id = set_user(user)
         login_user(user)
         return(redirect('/'))
     return 'Could not fetch your information.'
@@ -69,15 +79,22 @@ def api_selected_role():
     return ''
 
 @app.route('/api/foods')
+@login_required
 def api_foods():
     foods = fetch_foods()
+    selected_foods = fetch_selected_foods(current_user.id)
     for food in foods:
-        food['selected'] = False
+        if food['id'] in selected_foods:
+            food['selected'] = True
+        else:
+            food['selected'] = False
     return jsonify(foods)
 
 @app.route('/api/selected_food', methods=['POST'])
+@login_required
 def api_selected_food():
     foods = json.loads(request.data)['foods']
+    set_selected_foods(current_user.id, foods)
     return ''
 
 @app.route('/api/vote')
