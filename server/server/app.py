@@ -128,7 +128,10 @@ def api_vote():
             else:
                 combos.append((category, food1, food2)) 
 
-    category, food1, food2 = random.sample(combos, 1)[0]
+    if combos:
+        category, food1, food2 = random.sample(combos, 1)[0]
+    else:
+        category, food1, food2 = None, None, None
     vote =  {
         'category': category,
         'food1': food1,

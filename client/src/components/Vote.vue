@@ -1,17 +1,23 @@
 <template>
     <div class='main'>
-        <h1>Which one was <u>{{ category.superlative }}</u>?</h1>
-        <div class='grid'>
-            <p></p>
-            <img class='icon' v-bind:src='food1.image_url' v-on:click='record("food1")'>
-            <p class='icon-text'>vs.</p>
-            <img class='icon' v-bind:src='food2.image_url' v-on:click='record("food2")'>
-            <p></p>
-            <p></p>
-            <p>{{ food1.owner }}'s</p>
-            <p></p>
-            <p>{{ food2.owner }}'s</p>
-            <p></p>
+        <h1 v-if='category == null'>
+            Looks like you've voted on everything you've eaten!
+            <router-link to='/select'>Try more samples.</router-link>
+        </h1>
+        <div v-if='category != null'>
+            <h1>Which one was <u>{{ category.superlative }}</u>?</h1>
+            <div class='grid'>
+                <p></p>
+                <img class='icon' v-bind:src='food1.image_url' v-on:click='record("food1")'>
+                <p class='icon-text'>vs.</p>
+                <img class='icon' v-bind:src='food2.image_url' v-on:click='record("food2")'>
+                <p></p>
+                <p></p>
+                <p>{{ food1.owner }}'s</p>
+                <p></p>
+                <p>{{ food2.owner }}'s</p>
+                <p></p>
+            </div>
         </div>
     </div>
 </template>
