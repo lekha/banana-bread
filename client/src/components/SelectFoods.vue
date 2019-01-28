@@ -7,7 +7,7 @@
                 <transition name='fade'>
                     <div class='overlay' v-if='food.selected'><i class='fas fa-check fa-5x'></i></div>
                 </transition>
-                <p>{{ food.owner }}'s</p>
+                <p>{{ food.baker }}'s</p>
             </div>
         </div>
         <button v-on:click='redirectToVote()' :disabled='selected<2'>

@@ -59,7 +59,7 @@ def fetch_foods():
     conn = connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     query = '''
-        SELECT food.id, baker.name as owner, baker.id as owner_id,
+        SELECT food.id, baker.name as baker, baker.id as baker_id,
                food.image_url
           FROM cafe.foods food
      LEFT JOIN cafe.bakers baker
@@ -140,8 +140,8 @@ def set_votes(user, category, winner, loser):
     params = {
         'user_id': user.id,
         'category_id': category['id'],
-        'winner_id': winner['owner_id'],
-        'loser_id': loser['owner_id'],
+        'winner_id': winner['baker_id'],
+        'loser_id': loser['baker_id'],
     }
     conn = connection()
     cursor = conn.cursor()

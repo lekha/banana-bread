@@ -13,9 +13,9 @@
                 <img class='icon' v-bind:src='food2.image_url' v-on:click='record("food2")'>
                 <p></p>
                 <p></p>
-                <p>{{ food1.owner }}'s</p>
+                <p>{{ food1.baker }}'s</p>
                 <p></p>
-                <p>{{ food2.owner }}'s</p>
+                <p>{{ food2.baker }}'s</p>
                 <p></p>
             </div>
         </div>

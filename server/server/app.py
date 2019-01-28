@@ -117,8 +117,8 @@ def api_vote():
             for vote in previous_votes:
                 if category['id'] == vote['category_id']:
                     voted = (vote['winner_baker_id'], vote['loser_baker_id'])
-                    order1 = (food1['owner_id'], food2['owner_id'])
-                    order2 = (food2['owner_id'], food1['owner_id'])
+                    order1 = (food1['baker_id'], food2['baker_id'])
+                    order2 = (food2['baker_id'], food1['baker_id'])
                     if voted == order1 or voted == order2:
                         found_match = True 
                         break
