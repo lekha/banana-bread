@@ -16,6 +16,7 @@ from server.auth import Config
 from server.auth import auth_url_and_state
 from server.auth import load_user_from_id
 from server.auth import load_user_from_state
+from server.database import fetch_foods
 
 
 app = Flask(__name__)
@@ -24,24 +25,6 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.session_protection = 'strong'
 
-
-FOODS = [
-    {
-        'owner': 'Lekha',
-        'image_url': 'https://www.simplyrecipes.com/wp-content/uploads/2014/08/banana-bread-vertical-c-1200.jpg',
-        'selected': False,
-    },
-    {
-        'owner': 'Mike K',
-        'image_url': 'https://images-gmi-pmc.edge-generalmills.com/c23f59e1-1a55-4ba7-91de-71ca24e197fe.jpg',
-        'selected': False,
-    },
-    {
-        'owner': 'Danielle',
-        'image_url': 'https://www.landolakes.com/RecipeManagementSystem/media/Recipe-Media-Files/Recipes/Retail/x17/20643-walnut-banana-bread-600x600.jpg?ext=.jpg',
-        'selected': False,
-    },
-]
 
 SUPERLATIVES = ['prettier', 'tastier', 'better textured']
 
@@ -89,7 +72,10 @@ def api_selected_role():
 
 @app.route('/api/foods')
 def api_foods():
-    return jsonify(FOODS)
+    foods = fetch_foods()
+    for food in foods:
+        food['selected'] = False
+    return jsonify(foods)
 
 @app.route('/api/selected_food', methods=['POST'])
 def api_selected_food():
@@ -98,7 +84,7 @@ def api_selected_food():
 
 @app.route('/api/vote')
 def api_vote():
-    food1, food2 = random.sample(FOODS, 2)
+    food1, food2 = random.sample(fetch_foods(), 2)
     vote =  {
         'superlative': random.choice(SUPERLATIVES),
         'food1': food1,

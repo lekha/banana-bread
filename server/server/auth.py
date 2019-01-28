@@ -21,6 +21,14 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
+DB_AUTH = {
+    'host': os.environ.get('DB_HOST'),
+    'user': os.environ.get('DB_USER'),
+    'passwd': os.environ.get('DB_PASSWORD'),
+    'db': 'cafe'
+}
+
+
 class User(object):
     def __init__(
             self, id=None, name=None, email=None, avatar=None, tokens=None):
@@ -59,7 +67,6 @@ def google_auth(state=None, token=None):
             scope=Auth.SCOPE,
         )
     return session
-
 
 def auth_url_and_state():
     auth = google_auth()

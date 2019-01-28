@@ -15,6 +15,7 @@ SETUP_DEPS = ()
 INSTALL_DEPS = (
     'Flask',
     'flask-login',
+    'pymysql',
     'requests-oauthlib',
 )
 EXTRA_DEPS = {}
