@@ -173,3 +173,22 @@ def set_votes(user, category, winner, loser):
     cursor.execute(query, params)
     conn.commit()
     conn.close()
+
+def fetch_winnings():
+    query = '''
+        SELECT category.name as category, w_baker.name as winner,
+               l_baker.name as loser
+          FROM cafe.votes vote
+     LEFT JOIN cafe.bakers w_baker
+            ON vote.winner_baker_id = w_baker.id
+     LEFT JOIN cafe.bakers l_baker
+            ON vote.loser_baker_id = l_baker.id
+     LEFT JOIN cafe.categories category
+            ON vote.category_id = category.id
+    '''
+    conn = connection()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute(query)
+    winnings = cursor.fetchall()
+    conn.close()
+    return winnings

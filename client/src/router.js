@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import SelectRole from '@/components/SelectRole.vue';
 import SelectFoods from '@/components/SelectFoods.vue';
 import Vote from '@/components/Vote.vue';
+import Leaderboard from '@/components/Leaderboard.vue';
 
 Vue.use(Router);
 
@@ -23,6 +24,11 @@ export default new Router({
             path: '/vote',
             name: 'Vote',
             component: Vote 
+        },
+        {
+            path: '/leaderboard',
+            name: 'Leaderboard',
+            component: Leaderboard
         }
     ]
 });

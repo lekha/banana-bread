@@ -1,6 +1,7 @@
 """Back-end server."""
 import json
 import random
+from collections import defaultdict
 from itertools import combinations
 
 from flask import Flask
@@ -25,6 +26,7 @@ from server.database import fetch_user
 from server.database import fetch_user_by_id
 from server.database import fetch_voted_foods
 from server.database import fetch_votes
+from server.database import fetch_winnings
 from server.database import set_selected_foods
 from server.database import set_user
 from server.database import set_votes
@@ -159,6 +161,15 @@ def api_vote_result():
     else:
         set_votes(current_user, category, food2, food1)
     return ''
+
+@app.route('/api/rankings')
+def api_rankings():
+    scores_by_category = defaultdict(lambda: defaultdict(int))
+    for match in fetch_winnings():
+        scores_by_category[match['category']][match['winner']] += 1
+        scores_by_category[match['category']][match['loser']] -= 1
+
+    return jsonify(scores_by_category)
 
 
 if __name__ == '__main__':
