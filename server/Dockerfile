@@ -2,6 +2,8 @@ FROM python:latest
 
 WORKDIR /server/server
 
+ADD ./media /media
+
 ADD ./server/requirements.txt /server/requirements.txt
 RUN pip install -r /server/requirements.txt
 
