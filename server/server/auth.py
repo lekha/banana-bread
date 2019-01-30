@@ -7,10 +7,7 @@ from requests_oauthlib import OAuth2Session
 class Auth(object):
     CLIENT_ID = os.environ.get('CLIENT_ID')
     CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
-    REDIRECT_URI = (
-        os.environ.get('REDIRECT_URI') or
-        'http://localhost:8080/oauth2callback'
-    )
+    REDIRECT_URI = os.environ.get('REDIRECT_URI')
     AUTH_URI = 'https://accounts.google.com/o/oauth2/auth'
     TOKEN_URI = 'https://accounts.google.com/o/oauth2/token'
     USER_INFO = 'https://www.googleapis.com/userinfo/v2/me'

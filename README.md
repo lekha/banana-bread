@@ -6,29 +6,29 @@ A voting system for ranking banana breads in a bake-off competition
 ### Requirements
 
 You should have the following installed and running:
-* python 3
-* vue-cli 3
-* npm
+* docker
+* docker-compose
+
+You should also have Google Cloud OAuth credentials in your environment
+variables:
+1. Visit https://console.cloud.google.com and log in.
+2. Create a new project named however you'd like.
+3. Select `APIs&Services` --> `Credentials` from hamburger menu.
+4. Select `Create Credentials` --> `OAuth client ID` from dropdown.
+5. Select `Web application` radio button.
+6. Set `Name` however you like. Under `Authorized JavaScript origins`, add in
+http://localhost:5000. Under `Authorized redirect URIs`, add in
+http://localhost/oauth2callback.
+7. Copy the newly generated client ID and secret values and store them locally
+as environment variables called `CLIENT_ID` and `CLIENT_SECRET`.
 
 ### Setup
 
 ```bash
 git clone git@github.com:lekha/banana-bread
-
-virtualenv -p python3 server
-source server/bin/activate
-
-cd banana-bread/server
-pip install -r requirements.txt
-pip install -e .
-
-FLASK_APP=server/app.py flask run
+cd banana-bread
+docker-compose build
+docker-compose up
 ```
 
-In another tab:
-
-```bash
-cd banana-bread/client
-npm install
-npm run serve
-```
+Then visit `localhost` from your browser!

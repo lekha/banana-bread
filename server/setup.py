@@ -13,6 +13,7 @@ LONG_DESCRIPTION = DESCRIPTION
 
 SETUP_DEPS = ()
 INSTALL_DEPS = (
+    'cryptography',  # pymysql>=0.9 dependency
     'Flask',
     'flask-login',
     'pymysql',

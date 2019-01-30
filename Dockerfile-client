@@ -1,0 +1,11 @@
+FROM node:latest
+
+WORKDIR /client
+ADD ./client/package.json /client/package.json
+ADD ./client/package-lock.json /client/package-lock.json
+
+RUN npm install
+
+ADD ./client /client
+
+CMD ["npm", "run", "serve"]
